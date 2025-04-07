@@ -1,44 +1,47 @@
-# 💸 Simulador de Investimentos - Estilo Cyberpunk 💾
+# 💰 Simulador de Investimento
 
-🔗 **Acesse o simulador agora:**  
-👉 [lyanrodrigues.github.io/TestesGpt](https://lyanrodrigues.github.io/TestesGpt)
+Um simulador interativo e visualmente moderno para planejar e visualizar o crescimento dos seus investimentos ao longo do tempo. Ideal para estudantes, investidores iniciantes ou qualquer pessoa que queira entender melhor como aportes e juros compostos funcionam.
 
-![Preview do simulador](https://github.com/LyanRodrigues/TestesGpt/assets/SEU_USER/ID_DA_IMAGEM.gif)
+🌐 [Acesse o simulador aqui](https://lyanrodrigues.github.io/TestesGpt/)
 
-## 🚀 Sobre o projeto
+## 🎯 Funcionalidades
 
-Esse simulador calcula o crescimento dos seus investimentos ao longo do tempo com aporte mensal, juros compostos e até **aportes extras personalizados**.
+- **Simulação Personalizada**: Configure aportes mensais, rendimento anual e período de investimento.
+- **Aportes Extras**: Adicione valores pontuais em meses específicos via JSON.
+- **Gráfico Interativo**: Visualize o crescimento mês a mês com um gráfico animado.
+- **Temas Visuais**: Personalize a interface com diferentes estilos visuais e temas populares.
+- **Histórico Organizado**: Veja o resumo dos investimentos por ano com visual limpo e profissional.
+- **Experiência Imersiva**: Sons e animações opcionais para uma experiência mais envolvente.
 
-🧠 Ele ainda:
-- Mostra o gráfico com o crescimento
-- Tem efeitos sonoros 💥
-- Suporta múltiplos **temas visuais (neon, terminal, pastel...)**
-- Exibe histórico por ano (limpinho e organizado)
-- Interface responsiva, estilosa e interativa
+## 📸 Capturas de Tela
 
-## 🛠️ Tecnologias usadas
+![Tela Inicial do Simulador](https://raw.githubusercontent.com/LyanRodrigues/TestesGpt/main/assets/tela-inicial.png)
 
-- HTML5
-- CSS3 (com variáveis e temas)
-- JavaScript
-- [Chart.js](https://www.chartjs.org/) para os gráficos
+*Tela inicial com campos para personalização da simulação.*
+
+![Gráfico de Crescimento](https://raw.githubusercontent.com/LyanRodrigues/TestesGpt/main/assets/grafico-crescimento.png)
+
+*Gráfico dinâmico ilustrando o resultado da simulação.*
+
+## 🚀 Como Usar
+
+1. **Preencha os Campos**: Insira o aporte mensal, taxa anual e período desejado.
+2. **Configure Aportes Extras** *(opcional)*: Use JSON para definir valores específicos em certos meses.
+3. **Clique em "Calcular"**: O simulador processa os dados e exibe o gráfico com os resultados.
+4. **Explore os Temas**: Altere o tema visual e sons conforme sua preferência.
+5. **Consulte o Histórico**: Acompanhe os resultados por ano de forma clara e resumida.
+
+## 🛠️ Tecnologias Utilizadas
+
+- **HTML5**: Estrutura da aplicação
+- **CSS3**: Estilização e temas
+- **JavaScript**: Lógica de simulação e interatividade
+- **Chart.js**: Gráficos animados e responsivos
+
+## 📄 Licença
+
+Este projeto está licenciado sob a [MIT License](https://opensource.org/licenses/MIT).
 
 ---
 
-## ✨ Prints / Demonstração
-
-Coloca umas imagens aqui pra mostrar como ele é estiloso em diferentes temas, tipo:
-
-| Tema Neon | Tema Terminal | Tema Pastel |
-|----------|----------------|-------------|
-| ![neon](./prints/neon.png) | ![terminal](./prints/terminal.png) | ![pastel](./prints/pastel.png) |
-
----
-
-## 🎮 Experiência Cyberpunk
-
-Esse projeto foi criado por pura diversão + aprendizado, inspirado em uma estética retrô-tech com um toque de rebeldia 🖤💻✨
-
----
-
-## 🧑‍💻 Feito por [LyanRodrigues](https://github.com/LyanRodrigues)
+Desenvolvido com foco em clareza, acessibilidade e visual moderno por [Lyan Rodrigues](https://github.com/LyanRodrigues).
