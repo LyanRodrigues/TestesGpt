@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Simulador de Investimento - Ramona Style</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --bg: #111;
+      --text: #00FFAA;
+      --accent: #00FFAA;
+      --error: #ff4b4b;
+      --hover: #222;
+    }
+    [data-theme="light"] {
+      --bg: #fff;
+      --text: #222;
+      --accent: #007766;
+      --hover: #f0f0f0;
+    }
+    [data-theme="neon"] {
+      --bg: #0f0f0f;
+      --text: #00ffff;
+      --accent: #ff00ff;
+      --hover: #1f1f1f;
+    }
+    [data-theme="terminal"] {
+      --bg: #000;
+      --text: #0f0;
+      --accent: #0f0;
+      --hover: #111;
+    }
+    [data-theme="pastel"] {
+      --bg: #fef6e4;
+      --text: #001858;
+      --accent: #f582ae;
+      --hover: #f3d2c1;
+    }
+    [data-theme="dracula"] {
+      --bg: #282a36;
+      --text: #f8f8f2;
+      --accent: #bd93f9;
+      --hover: #44475a;
+    }
+    [data-theme="matrix"] {
+      --bg: #000;
+      --text: #00ff00;
+      --accent: #00ff00;
+      --hover: #003300;
+    }
+    [data-theme="outrun"] {
+      --bg: #0b0014;
+      --text: #ff77ff;
+      --accent: #00eaff;
+      --hover: #1a0033;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Courier New', monospace;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 30px;
+      transition: background 0.4s, color 0.4s;
+    }
+
+    .container {
+      max-width: 600px;
+      width: 100%;
+      background: var(--hover);
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 0 10px var(--accent);
+      position: relative;
+    }
+
+    h1 {
+      text-align: center;
+      text-shadow: 0 0 10px var(--accent);
+      margin-bottom: 20px;
+    }
+
+    .field {
+      margin: 10px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .field label {
+      margin-bottom: 5px;
+    }
+
+    input, select {
+      padding: 10px;
+      border: 2px solid var(--accent);
+      border-radius: 5px;
+      background: var(--bg);
+      color: var(--text);
+      transition: 0.3s;
+      width: 80%;
+      max-width: 300px;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 10px var(--accent);
+    }
+
+    input.error {
+      border-color: var(--error);
+      box-shadow: 0 0 10px var(--error);
+    }
+
+    button {
+      background: var(--accent);
+      color: var(--bg);
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      margin: 10px 5px 0;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: var(--text);
+      color: var(--bg);
+    }
+
+    canvas {
+	  margin-top: 20px;
+	  background: var(--bg);
+	  border: 2px solid var(--accent);
+	  border-radius: 5px;
+	  display: block;
+	  margin-left: auto;
+	  margin-right: auto;
+	  max-width: 100%;
+	}
+	
+	
+	#resultado {
+	  text-align: center;
+	  margin-top: 20px;
+	  font-size: 1.2em;
+	  font-weight: bold;
+	  text-shadow: 0 0 5px var(--accent);
+	}
+
+    .controls {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    #historicoValores {
+      margin-top: 20px;
+      padding: 10px;
+      background: var(--bg);
+      border: 1px solid var(--accent);
+      border-radius: 5px;
+      max-height: 200px;
+      overflow-y: auto;
+      color: var(--text);
+    }
+
+    .toggle-icons {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .toggle-icons span {
+      cursor: pointer;
+      font-size: 20px;
+      transition: transform 0.2s;
+    }
+
+    .toggle-icons span:hover {
+      transform: scale(1.2);
+    }
+
+    .aportes {
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    .aporte-line {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+      margin-top: 5px;
+    }
+
+    .aporte-line input {
+      width: 80px;
+    }
+
+    .delete-aporte {
+      background: var(--error);
+      color: #fff;
+      border-radius: 3px;
+      cursor: pointer;
+      padding: 5px;
+    }
+  </style>
+</head>
+<body data-theme="dark">
+  <div class="container">
+    <div class="toggle-icons">
+      <span id="toggle-sound">🔊</span>
+      <span id="toggle-theme">🌓</span>
+    </div>
+    <h1>Simulador de Investimento 💰</h1>
+
+    <div class="field"><label>Aporte Mensal (R$):</label><input type="number" id="aporte" value="1000"></div>
+    <div class="field"><label>Rendimento Anual (%):</label><input type="number" id="taxa" value="12" step="0.1"></div>
+    <div class="field"><label>Período:</label><input type="number" id="periodo" value="12"></div>
+    <div class="field">
+      <label>Tipo de Período:</label>
+      <select id="tipoPeriodo">
+        <option value="meses">Meses</option>
+        <option value="anos">Anos</option>
+      </select>
+    </div>
+
+    <div class="aportes">
+      <label>Aportes Extras:</label>
+      <div id="listaAportesExtras"></div>
+      <button onclick="adicionarAporteExtra()">+ Adicionar Aporte</button>
+    </div>
+
+    <div class="controls">
+      <button onclick="calcularInvestimento()">Calcular</button>
+      <button onclick="limparCampos()">Limpar</button>
+    </div>
+
+    <h2 id="resultado"></h2>
+    <canvas id="grafico" width="500" height="300"></canvas>
+
+    <div id="historicoAnoContainer" class="field" style="margin-top: 15px;">
+      <label>Ver histórico por ano:</label>
+      <select id="selectAno" onchange="mostrarAnoSelecionado()">
+        <option value="">Selecione um ano</option>
+      </select>
+    </div>
+    <div id="historicoValores"></div>
+  </div>
+
+  <audio id="hoverSound" src="https://freesound.org/data/previews/270/270304_5123851-lq.mp3"></audio>
+  <audio id="resultSound" src="https://freesound.org/data/previews/341/341695_6261194-lq.mp3"></audio>
+
+  <script>
+    let chart = null;
+    let somAtivado = true;
+    let temaAtual = "dark";
+    let anosMap = {};
+
+    document.getElementById("toggle-sound").onclick = () => {
+      somAtivado = !somAtivado;
+      document.getElementById("toggle-sound").textContent = somAtivado ? "🔊" : "🔇";
+    };
+
+    document.getElementById("toggle-theme").onclick = () => {
+      const temas = ["dark", "light", "neon", "terminal", "pastel", "dracula", "matrix", "outrun"];
+      const atual = temas.indexOf(temaAtual);
+      temaAtual = temas[(atual + 1) % temas.length];
+      document.body.setAttribute("data-theme", temaAtual);
+    };
+
+    function adicionarAporteExtra() {
+      const div = document.createElement("div");
+      div.className = "aporte-line";
+      div.innerHTML = `
+        <input type="number" placeholder="Mês" min="1">
+        <input type="number" placeholder="Valor (R$)">
+        <span class="delete-aporte" onclick="this.parentElement.remove()">✖</span>
+      `;
+      document.getElementById("listaAportesExtras").appendChild(div);
+    }
+
+    function calcularInvestimento() {
+      let erro = false;
+      const aporte = parseFloat(document.getElementById("aporte").value);
+      const taxa = parseFloat(document.getElementById("taxa").value);
+      const periodo = parseInt(document.getElementById("periodo").value);
+      const tipoPeriodo = document.getElementById("tipoPeriodo").value;
+      const campos = [document.getElementById("aporte"), document.getElementById("taxa"), document.getElementById("periodo")];
+
+      campos.forEach(c => {
+        c.classList.remove("error");
+        if (isNaN(parseFloat(c.value)) || parseFloat(c.value) < 0) {
+          c.classList.add("error");
+          erro = true;
+        }
+      });
+
+      if (erro) return;
+
+      const meses = tipoPeriodo === "anos" ? periodo * 12 : periodo;
+      const taxaMensal = Math.pow(1 + taxa / 100, 1 / 12) - 1;
+      let valor = 0;
+      let historico = [];
+      let aportesExtras = [];
+
+      document.querySelectorAll(".aporte-line").forEach(div => {
+        const inputs = div.querySelectorAll("input");
+        const mes = parseInt(inputs[0].value);
+        const val = parseFloat(inputs[1].value);
+        if (!isNaN(mes) && !isNaN(val)) {
+          aportesExtras.push({ mes, valor: val });
+        }
+      });
+
+      for (let i = 0; i < meses; i++) {
+        valor *= (1 + taxaMensal);
+        valor += aporte;
+        const extra = aportesExtras.find(a => a.mes - 1 === i);
+        if (extra) valor += extra.valor;
+        historico.push(valor);
+      }
+
+      document.getElementById("resultado").innerText = `Valor final: R$ ${valor.toFixed(2)}`;
+
+      // Montar estrutura por ano
+      anosMap = {};
+      historico.forEach((v, i) => {
+        const ano = Math.floor(i / 12) + 1;
+        const mes = (i % 12) + 1;
+        if (!anosMap[ano]) anosMap[ano] = [];
+        anosMap[ano].push({ mes, valor: v });
+      });
+
+      const selectAno = document.getElementById("selectAno");
+      selectAno.innerHTML = '<option value="">Selecione um ano</option>';
+      Object.keys(anosMap).forEach(ano => {
+        selectAno.innerHTML += `<option value="${ano}">${ano}º Ano</option>`;
+      });
+
+      if (Object.keys(anosMap).length === 1) {
+        selectAno.selectedIndex = 1;
+        mostrarAnoSelecionado();
+      } else {
+        document.getElementById("historicoValores").innerHTML = "";
+      }
+
+      if (somAtivado) document.getElementById("resultSound").play();
+
+      if (chart) chart.destroy();
+      const ctx = document.getElementById("grafico").getContext("2d");
+      chart = new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: historico.map((_, i) => `M${i + 1}`),
+          datasets: [{
+            label: "Crescimento do Investimento",
+            data: historico,
+            borderColor: getComputedStyle(document.body).getPropertyValue('--accent'),
+            backgroundColor: getComputedStyle(document.body).getPropertyValue('--accent') + "33",
+            fill: true,
+            borderWidth: 2,
+            tension: 0.4,
+            pointRadius: 0
+          }]
+        },
+        options: {
+          responsive: false,
+          plugins: {
+            legend: {
+              labels: {
+                color: getComputedStyle(document.body).getPropertyValue('--text')
+              }
+            },
+            tooltip: {
+              callbacks: {
+                label: (ctx) => `R$ ${ctx.parsed.y.toFixed(2)}`
+              }
+            }
+          },
+          scales: {
+            x: {
+              ticks: { color: getComputedStyle(document.body).getPropertyValue('--text') },
+              grid: { color: "#333" }
+            },
+            y: {
+              ticks: {
+                color: getComputedStyle(document.body).getPropertyValue('--text'),
+                callback: value => `R$ ${value.toFixed(0)}`
+              },
+              grid: { color: "#333" }
+            }
+          }
+        }
+      });
+    }
+
+    function mostrarAnoSelecionado() {
+      const ano = document.getElementById("selectAno").value;
+      if (!ano) return document.getElementById("historicoValores").innerHTML = "";
+      const meses = anosMap[ano];
+      let hist = `<strong>Histórico do ${ano}º Ano:</strong><br>`;
+      meses.forEach(({ mes, valor }) => {
+        hist += `Mês ${mes}: R$ ${valor.toFixed(2)}<br>`;
+      });
+      document.getElementById("historicoValores").innerHTML = hist;
+    }
+
+    function limparCampos() {
+      document.getElementById("aporte").value = "";
+      document.getElementById("taxa").value = "";
+      document.getElementById("periodo").value = "";
+      document.getElementById("listaAportesExtras").innerHTML = "";
+      document.getElementById("resultado").innerText = "";
+      document.getElementById("historicoValores").innerHTML = "";
+      document.getElementById("selectAno").innerHTML = '<option value="">Selecione um ano</option>';
+      if (chart) {
+        chart.destroy();
+        chart = null;
+      }
+    }
+  </script>
+</body>
+</html>
