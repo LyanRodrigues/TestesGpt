@@ -3,7 +3,6 @@
 Um simulador interativo e visualmente moderno para planejar e visualizar o crescimento dos seus investimentos ao longo do tempo. Ideal para estudantes, investidores iniciantes ou qualquer pessoa que queira entender melhor como aportes e juros compostos funcionam.
 
 🌐 [Acesse o simulador aqui](https://lyanrodrigues.github.io/TestesGpt/)
-
 ## 🎯 Funcionalidades
 
 - **Simulação Personalizada**: Configure aportes mensais, rendimento anual e período de investimento.
